@@ -1,0 +1,394 @@
+<!-- 
+head infomacion de pagina no visible    
+utf-8 permite tildes y ñ
+viewport permite la visualizacion en distintos tipos de pantalla
+title es el titulo de la pagina
+style es el css que da el diseño
+css es el diseño
+html el esqueleto
+y jv el funcionamiento logico
+body es todo lo visible
+div contenedor sin significado
+aside contenido secundario 
+main contenido principal de la pagina
+nav bloque de navegacion
+section agrupacion de contenido relacionado
+h1 y h2 son tamaños de letra
+p parrafo
+span texto inline, no corta la linea
+table contenedor de la tabla
+thead seccion de encabezado de la tabla
+tbody seccion de datos de la tabla
+tr fila de la tabl
+th celda de encabezado
+td celda de dato normal QTODO LO QUE TENGA T ES RELACIONADO A LA TABLA
+class=nomnbre creacion de etiqueta para css
+i=nombre identificador unico lo usa javascript para encontrar un elemento
+
+css
+display flex pone los elementos en linea horizontal
+flex 1 el elemento ocupa todo el espacio disponible
+gap 16px espacio entre elemntos
+height 100vh alto igual al 100% de la pantalla
+overflow-y auto scroll vertical si el contenido es largo
+width 200px ancho fijo en pixeles
+font family tipo de letra
+font size tamaño de texto 
+font weight bold texto en negrita
+padding espacio interno entre el borde y contenido
+margin espacio externo fuera del elemento
+border-radius rodea esquinas
+box-shadow sobra debajo del elemento
+border - bottom linea en el borde inferior
+border collapse elimine doble border en tablas
+cursor pointer cambia el cursor a manito
+
+* aplica atodos los elementos
+.nombre aplica elementos con esa clase
+.sidebar h1 aplica h1 para lo que esten dentro de siebar
+.sidebar nav p aplica p dentro de nav dentro de sidebar
+:hover se actiava cuando el mosue está encima
+
+NUEVO: ahora el sidebar lista estudiantes, no ramos
+al hacer click en un estudiante se abre su "perfil" (nombre, correo, y sus ramos)
+al hacer click en un ramo del perfil recien ahi se ve el detalle de siempre (tarjetas, notas, asistencia)
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD UCM</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .app{
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar{
+            width: 220px;
+            background-color: #1a1a2e;
+            color:white;
+            padding: 24px 16px;
+        }
+        .contenido{
+            flex: 1;
+            padding: 24px;
+            overflow-y:auto;
+        }
+        .tarjetas{
+            display: flex;
+            gap: 16px;
+            margin-bottom:24px ;
+        }
+        .tarjeta{
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .detalle{
+            background-color: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+        .progreso{
+            background-color: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        /* seccion nueva del perfil del estudiante, misma pinta que .detalle */
+        .perfil{
+            background-color: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+        /* los ramos dentro del perfil, se ven como botones clickeables, con fondo claro porque aca el fondo es blanco */
+        .perfil-ramos-nav p{
+            display: inline-block;
+            padding: 8px 14px;
+            margin: 4px 6px 4px 0;
+            background-color: #f0f2f5;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .perfil-ramos-nav p:hover{
+            background-color: #d8dce3;
+        }
+        .barra-contenedor{
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 16px;
+            margin-top:10px;
+        }
+        .barra-progreso{
+            background-color: #4CAF50;
+            height: 16px;
+            border-radius: 10px;
+            width: 0%;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td{
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th{
+            background-color: #f0f2f5;
+            font-weight: bold;
+        }
+        .sidebar h1{
+            font-size: 20px;
+            margin-bottom: 24px;
+        }
+        .sidebar nav p{
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            color: #aaa;
+        }
+        .sidebar nav p:hover{
+            background-color: #ffffff20;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <h1>UCM DashBoard</h1>
+    <!-- ahora esta lista son los estudiantes, en el mismo orden que el arreglo estudiantes.js -->
+    <nav>
+        <p>Renato Vergara</p>
+        <p>Benjamin Sanhueza</p>
+        <p>Amaro Villalobos</p>
+        <p>Francisco Vasques</p>
+        <p>Luis Torrejon</p>
+    </nav>
+    </aside>
+    <main class="contenido"><!-- se añade el class para clasificar y se agrega el id con el "" para espcificar que area debe de leer del js-->
+
+        <!-- seccion nueva: perfil del estudiante seleccionado -->
+        <section class="perfil">
+            <h2 id="perfil-nombre">Selecciona un estudiante</h2>
+            <p id="perfil-correo"></p>
+            <!-- aca el js va a insertar un <p> por cada ramo de este estudiante -->
+            <nav class="perfil-ramos-nav" id="perfil-ramos-nav"></nav>
+        </section>
+
+        <section class="tarjetas">
+            <div class="tarjeta" id="tarjeta-promedio">Promedio General</div>
+            <div class="tarjeta" id="tarjeta-asistencia">Asistencia</div>
+            <div class="tarjeta" id="tarjeta-faltas">Faltas disponibles</div>
+            <div class="tarjeta" id="tarjeta-estado">Estado</div>
+        </section>
+        <section class="detalle">
+            <h2 id="titulo-detalle">Detalle del Ramo</h2>
+            <h3>Asistencia</h3>
+            <table class="tabla-asistencia">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-asistencia-body"></tbody>
+           </table>
+           <h3>Notas</h3>
+           <table class="tabla-notas">
+            <thead>
+                <tr>
+                    <th>Evaluación</th>
+                    <th>Nota</th>
+                    <th>Porcentaje</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-notas-body"></tbody>
+           </table>
+           <p>Promedio del Ramo:<span id="promedio-ramo"></span></p>
+           <p>Nota mínima para aprobar: <span id="nota-minima" ></span></p>
+        </section>
+        <section class="progreso">
+            <h2>Progreso del Semestre</h2>
+            <p>Semana Actual: <span id="semana-actual"></span> de <span id="semana-total"></span></p>
+            <div class="barra-contenedor">
+                <div class="barra-progreso" id="barra-progreso"></div>
+            </div>
+        </section>
+    </main>
+</div>
+<!-- el script tiene que ir en java al cterminar el body ya que asi tiene todos los datos ya subidos
+ acase añaden la base de datos falsa tipo matriz en C -->
+ <!-- se añade antes del script un src script sourcs o src para espeficar la lectura del script-->
+<script src="estudiantes.js"></script>
+<script>
+
+function calcularPromedio(notas){
+    let total = 0;
+    for (let i=0; i< notas.length; i++){
+        // si la nota es null, todavia no se rinde esa evaluacion, no se suma al promedio
+        if (notas[i].nota !== null){
+            total += notas[i].nota * (notas[i].porcentaje_interno/100)* (notas[i].peso_final/100)
+        }
+    }
+    return total;
+}
+// calcula la nota que falta para aprobar considerando solo las evaluaciones pendientes (nota === null)
+function calcularNotaMinima(notas){
+    let pesoRendido = 0;
+    let puntajeRendido = 0;
+    let pesoPendiente = 0;
+
+    for (let i = 0; i < notas.length; i++){
+        let n = notas[i];
+        // el peso real de esta evaluacion en la nota final del ramo
+        let pesoReal = (n.porcentaje_interno / 100) * (n.peso_final / 100);
+
+        if (n.nota !== null){
+            pesoRendido += pesoReal;
+            puntajeRendido += n.nota * pesoReal;
+        } else {
+            pesoPendiente += pesoReal;
+        }
+    }
+
+    // si no hay nada pendiente, no hay nota minima que calcular
+    if (pesoPendiente === 0){
+        return "Sin evaluaciones pendientes";
+    }
+
+    // despeje: necesito que puntajeRendido + notaNecesaria*pesoPendiente sea al menos 4.0
+    let notaNecesaria = (4.0 - puntajeRendido) / pesoPendiente;
+
+    if (notaNecesaria <= 1.0) return "Ya asegurado, cualquier nota aprueba";
+    if (notaNecesaria > 7.0) return "Imposible aprobar con las notas actuales";
+    return notaNecesaria.toFixed(1);
+}
+/*let delcara una variable equivalente al float en c
+notas.lenght es el largo del arreglo 
+notas[i].nota accede a notas en posicion de */
+function calcularAsistencia(ramo){
+    return (ramo.clases_asistidas/ramo.clases_totales)*100;
+}
+function calcularFaltas(ramo){
+    let maxFaltas= Math.floor(ramo.clases_totales* 0.30);
+    let faltasActuales = ramo.clases_totales - ramo.clases_asistidas;
+    return maxFaltas - faltasActuales;
+}
+/* math.floor redondea como Int
+0.30 es el 30% de asistencia permitidas */
+
+/* funcion nueva: muestra el perfil del estudiante que se clickeo en el sidebar
+recibe el indice del estudiante dentro del arreglo estudiantes */
+function mostrarEstudiante(indexEstudiante){
+    let estudiante = estudiantes[indexEstudiante];
+
+    // llena el nombre y correo del perfil
+    document.getElementById("perfil-nombre").textContent = estudiante.nombre;
+    document.getElementById("perfil-correo").textContent = estudiante.correo;
+
+    // arma la lista de ramos de ese estudiante dentro del nav del perfil
+    // innerHTML = "" limpia lo que hubiera antes, sino se van acumulando ramos de otros estudiantes
+    let navRamos = document.getElementById("perfil-ramos-nav");
+    navRamos.innerHTML = "";
+
+    for (let i = 0; i < estudiante.ramos.length; i++){
+        // crea un <p> por cada ramo. las comillas invertidas (`) permiten meter variables adentro con ${}
+        navRamos.innerHTML += `<p>${estudiante.ramos[i].nombre}</p>`;
+    }
+
+    // ahora hay que buscar esos <p> recien creados y ponerles el click
+    // esto va despues de crearlos, porque antes de crearlos no existen en la pagina
+    let itemsRamos = navRamos.querySelectorAll("p");
+    for (let i = 0; i < itemsRamos.length; i++){
+        itemsRamos[i].addEventListener("click", function(){
+            mostrarRamo(indexEstudiante, i);
+        });
+    }
+
+    // muestra el primer ramo del estudiante de forma automatica
+    mostrarRamo(indexEstudiante, 0);
+}
+
+/* funcion modificada: ahora recibe DOS parametros, de que estudiante y que ramo
+antes solo recibia el ramo, porque los ramos estaban sueltos en un solo arreglo */
+function mostrarRamo(indexEstudiante, indexRamo){
+    let estudiante = estudiantes[indexEstudiante];
+    let ramo = estudiante.ramos[indexRamo];
+
+    document.getElementById("titulo-detalle").textContent = ramo.nombre;
+
+    let promedio = calcularPromedio(ramo.notas);
+    document.getElementById("tarjeta-promedio").textContent = "Promedio: "+ promedio.toFixed(1);
+
+    let asistencia = calcularAsistencia(ramo);
+    document.getElementById("tarjeta-asistencia").textContent = "Asistencia: "+ asistencia.toFixed(0) + "%";
+
+    let faltas = calcularFaltas(ramo);
+    document.getElementById("tarjeta-faltas").textContent = "Margen de faltas: " + faltas;
+
+    let estado = promedio>= 4.0 ? "Aprobado" : "Reprobado";
+    document.getElementById("tarjeta-estado").textContent = estado;
+
+    document.getElementById("promedio-ramo").textContent = promedio.toFixed(2);
+
+    // como todas las notas de este ramo ya estan puestas (no quedan evaluaciones pendientes)
+    // el promedio ya es definitivo, por eso la nota minima no aplica, solo se informa el resultado
+  let notaMinima = calcularNotaMinima(ramo.notas);
+document.getElementById("nota-minima").textContent = notaMinima;
+
+    // llena la tabla de notas
+    // primero se limpia, sino se van acumulando las notas de ramos anteriores
+    let tbodyNotas = document.getElementById("tabla-notas-body");
+    tbodyNotas.innerHTML = "";
+    for (let i = 0; i < ramo.notas.length; i++){
+        let n = ramo.notas[i];
+        // otra vez comillas invertidas para armar una fila de tabla con los datos de cada nota
+        tbodyNotas.innerHTML += `<tr>
+            <td>${n.evaluacion}</td>
+            <td>${n.nota !== null ? n.nota : "Pendiente"}</td>
+            <td>${n.porcentaje_interno}% interno / ${n.peso_final}% final</td>
+        </tr>`;
+    }
+
+    let porcentajebarra = (ramo.clases_asistidas / ramo.clases_totales)* 100;
+    document.getElementById("barra-progreso").style.width = porcentajebarra + "%";
+    document.getElementById("semana-actual").textContent = ramo.clases_asistidas;
+    document.getElementById("semana-total").textContent = ramo.clases_totales;
+}
+
+// el sidebar ahora llama a mostrarEstudiante en vez de mostrarRamo directamente
+let items = document.querySelectorAll(".sidebar nav p");
+for (let i = 0; i<items.length; i++){
+    items[i].addEventListener("click", function(){
+        mostrarEstudiante(i);
+    });
+}
+
+// al cargar la pagina muestra el primer estudiante de la lista
+mostrarEstudiante(0);
+
+</script>
+</body> 
+</html>
